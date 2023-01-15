@@ -1,233 +1,195 @@
 {
-    "project": [
-        {
-            "state_file": "local",
-            "envs": [
-                "dev",
-                "prod"
-            ],
-            "modules": [
-                "base",
-                "compute",
-                "infra"
-            ]
-        }
-    ],
-    "base": [
-        {
-            "vpc": [
-                {
-                    "amount": 2,
-                    "name": "vpc-1",
-                    "region": "ams3",
-                    "description": "This is a VPC created from TF script",
-                    "ip_range": "192.168.0.0/16"
-                }
-            ]
-        }
-    ],
-    "compute": [
-        {
-            "droplet": [
-                {
-                    "amount": 1,
-                    "image": "ubuntu-18-04-x64",
-                    "name": "web-1",
-                    "region": "ams3",
+    "project": {
+        "size": "medium",
+        "state_file": "cloud",
+        "envs": [
+            "dev",
+            "prod"
+        ],
+        "modules": [
+            "base",
+            "compute",
+            "infra"
+        ]
+    },
+    "base": {
+        "vpc": [
+            {
+                "amount": 2,
+                "name": "vpc-1",
+                "region": "ams3",
+                "description": "This is a VPC created from TF scripts hosted on App Platform",
+                "ip_range": "192.168.0.0/16"
+            }
+        ]
+    },
+    "compute": {
+        "droplet": [
+            {
+                "amount": 1,
+                "image": "ubuntu-18-04-x64",
+                "name": "web-1",
+                "region": "ams3",
+                "size": "s-1vcpu-1gb",
+                "backups": false,
+                "monitoring": false,
+                "ipv6": false,
+                "vpc_uuid": "",
+                "ssh_Keys": [
+                    "e8:0c:f1:a1:d7:a0:60:1f:3f:b2:df:3a:f0:93:38:b5"
+                ],
+                "resize_disk": false,
+                "tags": [
+                    "terraform",
+                    "droplet"
+                ],
+                "user_data": "!#/bin/bash\n\ntouch ~/terraform.txt",
+                "volume_ids": [
+                    ""
+                ],
+                "droplet_agent": true,
+                "graceful_shutdown": false
+            },
+            {
+                "amount": 3,
+                "image": "ubuntu-18-04-x64",
+                "name": "web-2",
+                "region": "ams3",
+                "size": "s-1vcpu-1gb"
+            }
+        ],
+        "k8s": [
+            {
+                "amount": 1,
+                "name": "k8s-1",
+                "region": "ams3",
+                "version": "1.25.4-do.0",
+                "vpc_uuid": "",
+                "auto_upgrade": false,
+                "surge_upgrade": false,
+                "ha": true,
+                "tags": [
+                    "terraform",
+                    "k8s"
+                ],
+                "node_pool": {
+                    "name": "np-1",
                     "size": "s-1vcpu-1gb",
-                    "backups": false,
-                    "monitoring": false,
-                    "ipv6": false,
-                    "vpc_uuid": "",
-                    "ssh_Keys": [
-                        "e8:0c:f1:a1:d7:a0:60:1f:3f:b2:df:3a:f0:93:38:b5"
-                    ],
-                    "resize_disk": false,
+                    "node_count": 3,
+                    "auto_scale": true,
+                    "min_nodes": 2,
+                    "max_nodes": 6,
                     "tags": [
                         "terraform",
-                        "droplet"
+                        "k8s",
+                        "nodepool"
                     ],
-                    "user_data": "!#/bin/bash\n\ntouch ~/terraform.txt",
-                    "volume_ids": [
-                        ""
-                    ],
-                    "droplet_agent": true,
-                    "graceful_shutdown": false
+                    "labels": {
+                        "key1": "value1",
+                        "key2": "value2"
+                    }
                 },
-                {
-                    "amount": 3,
-                    "image": "ubuntu-18-04-x64",
-                    "name": "web-1",
-                    "region": "ams3",
-                    "size": "s-1vcpu-1gb"
+                "maintenance_policy": {
+                    "day": "sunday",
+                    "start_time": "03:00"
                 }
-            ],
-            "k8s": [
-                {
-                    "amount": 1,
-                    "name": "k8s-1",
-                    "region": "ams3",
-                    "version": "1.25.4-do.0",
-                    "vpc_uuid": "",
-                    "auto_upgrade": false,
-                    "surge_upgrade": false,
-                    "ha": true,
-                    "tags": [
-                        "terraform",
-                        "k8s"
-                    ],
-                    "node_pool": {
-                        "name": "np-1",
-                        "size": "s-1vcpu-1gb",
-                        "node_count": 3,
-                        "auto_scale": true,
-                        "min_nodes": 2,
-                        "max_nodes": 6,
-                        "tags": [
-                            "terraform",
-                            "k8s",
-                            "nodepool"
-                        ],
-                        "labels": {
-                            "key1": "value1",
-                            "key2": "value2"
-                        }
-                    },
-                    "maintenance_policy": {
-                        "day": "sunday",
-                        "start_time": "03:00"
-                    }
+            },
+            {
+                "amount": 1,
+                "name": "k8s-2",
+                "region": "ams3",
+                "version": "1.25.4-do.0",
+                "auto_upgrade": false,
+                "ha": true,
+                "node_pool": {
+                    "name": "np-1",
+                    "size": "s-1vcpu-1gb",
+                    "min_nodes": 2,
+                    "max_nodes": 6
                 }
-            ]
-        }
-    ],
-    "infra": [
-        {
-            "database_cluster": [
-                {
-                    "amount": 1,
-                    "name": "db-1",
-                    "engine": "pg",
-                    "size": "db-s-1vcpu-1gb",
-                    "region": "ams3",
-                    "node_count": 2,
-                    "version": "14",
-                    "tags": [
-                        "terraform",
-                        "database",
-                        "postgress"
-                    ],
-                    "private_network_uuid": "",
-                    "eviction_policy": "",
-                    "sql_mode": "",
-                    "maintenance_window": {
-                        "day": "sunday",
-                        "hour": "03:00"
-                    },
-                    "timeouts": {
-                        "create": "60s",
-                        "delete": "30s",
-                        "update": "60s"
-                    }
+            }
+        ]
+    },
+    "infra": {
+        "database_cluster": [
+            {
+                "amount": 1,
+                "name": "db-1",
+                "engine": "pg",
+                "size": "db-s-1vcpu-1gb",
+                "region": "ams3",
+                "node_count": 2,
+                "version": "14",
+                "tags": [
+                    "terraform",
+                    "database",
+                    "postgress"
+                ],
+                "private_network_uuid": "",
+                "eviction_policy": "",
+                "sql_mode": "",
+                "maintenance_window": {
+                    "day": "sunday",
+                    "hour": "03:00"
+                },
+                "timeouts": {
+                    "create": "60s",
+                    "delete": "30s",
+                    "update": "60s"
                 }
-            ],
-            "load_balancer": [
-                {
-                    "amount": 1,
-                    "name": "lb-1",
-                    "region": "ams3",
-                    "forwarding_rule": {
-                        "entry_protocol": "http",
-                        "entry_port": 80,
-                        "target_protocol": "http",
-                        "target_port": 80,
-                        "certificatename": "",
-                        "tls_passthrough": false
-                    },
-                    "size": "lb-small",
-                    "size_unit": 3,
-                    "algorithm": "round_robin",
-                    "redirect_http_to_https": true,
-                    "enable_proxy_protocol": false,
-                    "enable_backend_keepalive": false,
-                    "http_idle_timeout_seconds": 30,
-                    "disable_lets_encrypt_dns_records": true,
-                    "project_id": "",
-                    "vpc_uuid": "",
-                    "droplet_ids": [
-                        ""
-                    ],
-                    "droplet_tag": [
-                        ""
-                    ],
-                    "healthcheck": {
-                        "protocol": "tcp",
-                        "port": 22,
-                        "path": "",
-                        "check_interval_seconds": 30,
-                        "response_timeout_seconds": 30,
-                        "unhealthy_threshold": 3,
-                        "healthy_threshold": 3
-                    },
-                    "sticky_sessions": {
-                        "type": "",
-                        "cookie_name": "",
-                        "cookie_ttl_seconds": 30
-                    }
+            }
+        ],
+        "load_balancer": [
+            {
+                "amount": 1,
+                "name": "lb-1",
+                "region": "ams3",
+                "forwarding_rule": {
+                    "entry_protocol": "http",
+                    "entry_port": 80,
+                    "target_protocol": "http",
+                    "target_port": 80,
+                    "certificatename": "",
+                    "tls_passthrough": false
+                },
+                "size": "lb-small",
+                "size_unit": 3,
+                "algorithm": "round_robin",
+                "redirect_http_to_https": true,
+                "enable_proxy_protocol": false,
+                "enable_backend_keepalive": false,
+                "http_idle_timeout_seconds": 30,
+                "disable_lets_encrypt_dns_records": true,
+                "project_id": "",
+                "vpc_uuid": "",
+                "droplet_ids": [
+                    ""
+                ],
+                "droplet_tag": [
+                    ""
+                ],
+                "healthcheck": {
+                    "protocol": "tcp",
+                    "port": 22,
+                    "path": "",
+                    "check_interval_seconds": 30,
+                    "response_timeout_seconds": 30,
+                    "unhealthy_threshold": 3,
+                    "healthy_threshold": 3
                 }
-            ],
-            "spaces": [
-                {
-                    "amount": 1,
-                    "name": "sp-1",
-                    "region": "ams3",
-                    "acl": "public-read",
-                    "cors_rule": [
-                        {
-                            "allowed_methods": [
-                                ""
-                            ],
-                            "allowed_origins": [
-                                ""
-                            ],
-                            "allowed_headers": [
-                                ""
-                            ],
-                            "max_age_seconds": 30
-                        },
-                        {
-                            "allowed_methods": [
-                                ""
-                            ],
-                            "allowed_origins": [
-                                ""
-                            ],
-                            "allowed_headers": [
-                                ""
-                            ],
-                            "max_age_seconds": 40
-                        }
-                    ],
-                    "lifecycle_rule": {
-                        "enabled": false,
-                        "id": "",
-                        "prefix": "",
-                        "abort_incomplete_multipart_upload_days": 3,
-                        "expiration": {
-                            "date": "",
-                            "days": 3,
-                            "expired_object_delete_marker": false
-                        },
-                        "noncurrent_version_expiration": {
-                            "days": 5
-                        }
-                    },
-                    "versioning": {
-                        "enabled": false
-                    },
-                    "force_destroy": true
-                }
-            ]
-        }
-    ]
+            }
+        ],
+        "spaces": [
+            {
+                "amount": 1,
+                "name": "sp-1",
+                "region": "ams3",
+                "acl": "public-read",
+                "versioning": {
+                    "enabled": false
+                },
+                "force_destroy": true
+            }
+        ]
+    }
 }

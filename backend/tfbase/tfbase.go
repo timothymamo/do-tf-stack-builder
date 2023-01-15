@@ -19,14 +19,14 @@ func CreateBaseFiles(w http.ResponseWriter, base Base, p tfutils.Project, rootEn
 
 	if base.Vpc != nil {
 		for i := range base.Vpc {
-			modBody, tfMod, tfModFile := tfutils.InitModLayerFile(layer+"/"+strings.Replace(*base.Vpc[i].Name, "_", "-", -1), strings.Replace(*base.Vpc[i].Name, "_", "-", -1))
+			modBody, tfMod, tfModFile := tfutils.InitModuleFile(layer+"/"+strings.Replace(*base.Vpc[i].Name, "_", "-", -1), strings.Replace(*base.Vpc[i].Name, "_", "-", -1))
 			tfutils.InitModule(w, modBody, base.Vpc[i], "digitalocean_vpc", p.Size, layer)
 			if p.Size == "medium" {
 				moduleBlockBody := tfutils.InitEnvFile(p.Modules[1], *base.Vpc[i].Name, rootEnvBody)
 
 				tfutils.TFVarModule(p.Size, base.Vpc[i], moduleBlockBody)
 			}
-			tfutils.EndModule(tfMod, tfModFile, p.Size, layer, *base.Vpc[i].Name)
+			tfutils.EndModuleFile(tfMod, tfModFile, p.Size, layer, *base.Vpc[i].Name)
 		}
 	}
 }

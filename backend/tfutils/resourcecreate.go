@@ -62,7 +62,7 @@ func InitModule(w http.ResponseWriter, rootBody *hclwrite.Body, typ interface{},
 			rootBody.AppendNewline()
 
 			name := strings.Replace(*values.FieldByName("Name").Interface().(*string), "-", "_", -1)
-			varBody, tfVar, tfVarFile := InitModLayerFile(l+"/"+strings.Replace(name, "_", "-", -1), "variables-"+strings.Replace(name, "_", "-", -1))
+			varBody, tfVar, tfVarFile := InitModuleFile(l+"/"+strings.Replace(name, "_", "-", -1), "variables-"+strings.Replace(name, "_", "-", -1))
 			for i := 0; i < values.NumField(); i++ {
 				field := reflect.TypeOf(typ).Field(i).Tag
 				if string(field.Get("json")) != "amount" {
