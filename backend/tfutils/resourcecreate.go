@@ -23,7 +23,7 @@ func InitModule(w http.ResponseWriter, rootBody *hclwrite.Body, typ interface{},
 		if s == "small" {
 			for i := 0; i < values.NumField(); i++ {
 				field := reflect.TypeOf(typ).Field(i).Tag
-				if string(field.Get("json")) != "amount" {
+				if string(field.Get("json")) != "amount" || string(field.Get("json")) != "output" {
 					if string(field.Get("json")) != "name" {
 						AppendAttrIfNotNil(blockBody, string(field.Get("json")), s, values.Field(i).Interface())
 					} else if string(field.Get("json")) == "name" {
@@ -47,7 +47,7 @@ func InitModule(w http.ResponseWriter, rootBody *hclwrite.Body, typ interface{},
 			values := reflect.ValueOf(typ)
 			for i := 0; i < values.NumField(); i++ {
 				field := reflect.TypeOf(typ).Field(i).Tag
-				if string(field.Get("json")) != "amount" {
+				if string(field.Get("json")) != "amount" || string(field.Get("json")) != "output" {
 					if string(field.Get("json")) != "name" {
 						AppendAttrTravIfNotNil(blockBody, string(field.Get("json")), string(field.Get("json")), values.Field(i).Interface())
 					} else if string(field.Get("json")) == "name" {
@@ -65,7 +65,7 @@ func InitModule(w http.ResponseWriter, rootBody *hclwrite.Body, typ interface{},
 			varBody, tfVar, tfVarFile := InitModuleFile(l+"/"+strings.Replace(name, "_", "-", -1), "variables-"+strings.Replace(name, "_", "-", -1))
 			for i := 0; i < values.NumField(); i++ {
 				field := reflect.TypeOf(typ).Field(i).Tag
-				if string(field.Get("json")) != "amount" {
+				if string(field.Get("json")) != "amount" || string(field.Get("json")) != "output" {
 					CreateVarIfNotNil(varBody, string(field.Get("json")), string(field.Get("description")), values.Field(i).Interface())
 				}
 			}

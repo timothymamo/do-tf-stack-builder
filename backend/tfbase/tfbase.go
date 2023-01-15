@@ -10,7 +10,7 @@ import (
 )
 
 type Base struct {
-	Vpc []Vpc `json:"vpc"`
+	Vpc []VPC `json:"vpc"`
 }
 
 func CreateBaseFiles(w http.ResponseWriter, base Base, p tfutils.Project, rootEnvBody *hclwrite.Body, tfEnvMain *hclwrite.File) {
