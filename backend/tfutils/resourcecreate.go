@@ -23,50 +23,54 @@ func InitModule(w http.ResponseWriter, rootBody *hclwrite.Body, typ interface{},
 		if s == "small" {
 			for i := 0; i < values.NumField(); i++ {
 				field := reflect.TypeOf(typ).Field(i).Tag
-				if string(field.Get("json")) != "amount" || string(field.Get("json")) != "output" {
-					if string(field.Get("json")) != "name" {
-						AppendAttrIfNotNil(blockBody, string(field.Get("json")), s, values.Field(i).Interface())
-					} else if string(field.Get("json")) == "name" {
-						if int(values.FieldByName("Amount").Int()) > 1 {
-							userTokens := hclwrite.Tokens{
-								{
-									Type:  hclsyntax.TokenStringLit,
-									Bytes: []byte(`"` + *values.Field(i).Interface().(*string) + `-${count.index}"`),
-								},
+				if string(field.Get("json")) != "amount" {
+					if !strings.Contains((reflect.TypeOf(typ).Field(i).Name), "Outputs") {
+						if string(field.Get("json")) != "name" {
+							AppendAttrIfNotNil(blockBody, string(field.Get("json")), s, values.Field(i).Interface())
+						} else if string(field.Get("json")) == "name" {
+							if int(values.FieldByName("Amount").Int()) > 1 {
+								userTokens := hclwrite.Tokens{
+									{
+										Type:  hclsyntax.TokenStringLit,
+										Bytes: []byte(`"` + *values.Field(i).Interface().(*string) + `-${count.index}"`),
+									},
+								}
+								blockBody.SetAttributeRaw("name", userTokens)
+							} else {
+								blockBody.SetAttributeValue(string(field.Get("json")), cty.StringVal(*values.Field(i).Interface().(*string)))
 							}
-							blockBody.SetAttributeRaw("name", userTokens)
-						} else {
-							blockBody.SetAttributeValue(string(field.Get("json")), cty.StringVal(*values.Field(i).Interface().(*string)))
 						}
 					}
 				}
 			}
-			rootBody.AppendNewline()
 
 		} else if s == "medium" {
 			values := reflect.ValueOf(typ)
 			for i := 0; i < values.NumField(); i++ {
 				field := reflect.TypeOf(typ).Field(i).Tag
-				if string(field.Get("json")) != "amount" || string(field.Get("json")) != "output" {
-					if string(field.Get("json")) != "name" {
-						AppendAttrTravIfNotNil(blockBody, string(field.Get("json")), string(field.Get("json")), values.Field(i).Interface())
-					} else if string(field.Get("json")) == "name" {
-						if int(values.FieldByName("Amount").Int()) > 1 {
-							blockBody.SetAttributeTraversal("name", hcl.Traversal{hcl.TraverseRoot{Name: "\"${var"}, hcl.TraverseAttr{Name: string(field.Get("json")) + "}-${count.index}\""}})
-						} else {
-							blockBody.SetAttributeTraversal("name", hcl.Traversal{hcl.TraverseRoot{Name: "var"}, hcl.TraverseAttr{Name: string(field.Get("json"))}})
+				if string(field.Get("json")) != "amount" {
+					if !strings.Contains((reflect.TypeOf(typ).Field(i).Name), "Outputs") {
+						if string(field.Get("json")) != "name" {
+							AppendAttrTravIfNotNil(blockBody, string(field.Get("json")), string(field.Get("json")), values.Field(i).Interface())
+						} else if string(field.Get("json")) == "name" {
+							if int(values.FieldByName("Amount").Int()) > 1 {
+								blockBody.SetAttributeTraversal("name", hcl.Traversal{hcl.TraverseRoot{Name: "\"${var"}, hcl.TraverseAttr{Name: string(field.Get("json")) + "}-${count.index}\""}})
+							} else {
+								blockBody.SetAttributeTraversal("name", hcl.Traversal{hcl.TraverseRoot{Name: "var"}, hcl.TraverseAttr{Name: string(field.Get("json"))}})
+							}
 						}
 					}
 				}
 			}
-			rootBody.AppendNewline()
 
 			name := strings.Replace(*values.FieldByName("Name").Interface().(*string), "-", "_", -1)
 			varBody, tfVar, tfVarFile := InitModuleFile(l+"/"+strings.Replace(name, "_", "-", -1), "variables-"+strings.Replace(name, "_", "-", -1))
 			for i := 0; i < values.NumField(); i++ {
 				field := reflect.TypeOf(typ).Field(i).Tag
-				if string(field.Get("json")) != "amount" || string(field.Get("json")) != "output" {
-					CreateVarIfNotNil(varBody, string(field.Get("json")), string(field.Get("description")), values.Field(i).Interface())
+				if string(field.Get("json")) != "amount" {
+					if !strings.Contains((reflect.TypeOf(typ).Field(i).Name), "Outputs") {
+						CreateVarIfNotNil(varBody, string(field.Get("json")), string(field.Get("description")), values.Field(i).Interface())
+					}
 				}
 			}
 			formattedContent := hclwrite.Format(tfVar.Bytes())
@@ -79,7 +83,9 @@ func InitModule(w http.ResponseWriter, rootBody *hclwrite.Body, typ interface{},
 func TFVarModule(s string, typ interface{}, moduleBlockBody *hclwrite.Body) {
 	values := reflect.ValueOf(typ)
 	for i := 1; i < values.NumField(); i++ {
-		field := reflect.TypeOf(typ).Field(i).Tag
-		AppendAttrIfNotNil(moduleBlockBody, string(field.Get("json")), s, values.Field(i).Interface())
+		if !strings.Contains((reflect.TypeOf(typ).Field(i).Name), "Outputs") {
+			field := reflect.TypeOf(typ).Field(i).Tag
+			AppendAttrIfNotNil(moduleBlockBody, string(field.Get("json")), s, values.Field(i).Interface())
+		}
 	}
 }

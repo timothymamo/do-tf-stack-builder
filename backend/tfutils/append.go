@@ -37,9 +37,9 @@ func AppendAttrIfNotNil(body *hclwrite.Body, attr, size string, typ interface{})
 			}
 		}
 	case reflect.Struct:
+		values := reflect.ValueOf(typ)
+		typName := reflect.TypeOf(typ).Elem().Name()
 		if size == "small" {
-			values := reflect.ValueOf(typ)
-			typName := reflect.TypeOf(typ).Elem().Name()
 			varBlock := body.AppendNewBlock(typName, []string{})
 			varBody := varBlock.Body()
 			for j := 0; j < values.Elem().NumField(); j++ {
@@ -47,8 +47,6 @@ func AppendAttrIfNotNil(body *hclwrite.Body, attr, size string, typ interface{})
 				AppendAttrIfNotNil(varBody, string(field.Get("json")), size, values.Elem().Field(j).Interface())
 			}
 		} else if size == "medium" {
-			values := reflect.ValueOf(typ)
-			typName := reflect.TypeOf(typ).Elem().Name()
 			for j := 0; j < values.Elem().NumField(); j++ {
 				field := reflect.TypeOf(typ).Elem().Field(j).Tag
 				AppendAttrIfNotNil(body, typName+"_"+string(field.Get("json")), size, values.Elem().Field(j).Interface())

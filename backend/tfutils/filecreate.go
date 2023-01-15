@@ -55,6 +55,8 @@ func ProviderFile(layer, filename string) {
 	// varBlockBody := varBlock.Body()
 	// varBlockBody.AppendNewline()
 
+	rootBody.AppendNewline()
+
 	formattedContent := hclwrite.Format(tfProvider.Bytes())
 	tfProviderFile.Write(formattedContent)
 
