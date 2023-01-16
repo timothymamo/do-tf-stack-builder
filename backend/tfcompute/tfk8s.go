@@ -32,56 +32,18 @@ type maintenance_policy struct {
 }
 
 type K8sOutputs struct {
-	Id                 string                  `json:"output_id" description:"A unique ID that can be used to identify and reference a Kubernetes cluster."`
-	Cluster_subnet     string                  `json:"output_cluster_subnet" description:"The range of IP addresses in the overlay network of the Kubernetes cluster."`
-	Service_subnet     string                  `json:"output_service_subnet" description:"The range of assignable IP addresses for services running in the Kubernetes cluster."`
-	Ipv4_address       string                  `json:"output_ipv4_address" description:"The public IPv4 address of the Kubernetes master node. This will not be set if high availability is configured on the cluster (v1.21+)"`
-	Endpoint           string                  `json:"output_endpoint" description:"The base URL of the API server on the Kubernetes master node."`
-	Status             string                  `json:"output_status" description:"A string indicating the current status of the cluster. Potential values include running, provisioning, and errored."`
-	Vpcuuid            string                  `json:"output_vpc_uuid" description:"The ID of the VPC where the Kubernetes cluster is located."`
-	Created_at         string                  `json:"output_created_at" description:"The date and time when the Kubernetes cluster was created."`
-	Updated_at         string                  `json:"output_updated_at" description:"The date and time when the Kubernetes cluster was last updated."`
-	Auto_upgrade       bool                    `json:"output_auto_upgrade" description:"A boolean value indicating whether the cluster will be automatically upgraded to new patch releases during its maintenance window."`
-	Kube_config        KubeConfigOutput        `json:"output_kube_config.0" description:"A representation of the Kubernetes cluster's kubeconfig with the following attributes:"`
-	Node_pool          NodePoolOutput          `json:"output_node_pool" description:"In addition to the arguments provided, these additional attributes about the cluster's default node pool are exported:"`
-	Urn                string                  `json:"output_urn" description:"The uniform resource name (URN) for the Kubernetes cluster."`
-	Maintenance_policy MaintenancePolicyOutput `json:"output_maintenance_policy" description:"A block representing the cluster's maintenance window. Updates will be applied within this window. If not specified, a default maintenance window will be chosen."`
-}
-
-type KubeConfigOutput struct {
-	Raw_config             string `json:"output_raw_config" description:"The full contents of the Kubernetes cluster's kubeconfig file."`
-	Host                   string `json:"output_host" description:"The URL of the API server on the Kubernetes master node."`
-	Cluster_ca_certificate string `json:"output_cluster_ca_certificate" description:"The base64 encoded public certificate for the cluster's certificate authority."`
-	Token                  string `json:"output_token" description:"The DigitalOcean API access token used by clients to access the cluster."`
-	Client_key             string `json:"output_client_key" description:"The base64 encoded private key used by clients to access the cluster. Only available if token authentication is not supported on your cluster."`
-	Client_certificate     string `json:"output_client_certificate" description:"The base64 encoded public certificate used by clients to access the cluster. Only available if token authentication is not supported on your cluster."`
-	Expires_at             string `json:"output_expires_at" description:"The date and time when the credentials will expire and need to be regenerated."`
-}
-
-type NodePoolOutput struct {
-	Id                string       `json:"output_id" description:"A unique ID that can be used to identify and reference the node pool."`
-	Actual_node_count int          `json:"output_actual_node_count" description:"A computed field representing the actual number of nodes in the node pool, which is especially useful when auto-scaling is enabled."`
-	Nodes             NodesOutput  `json:"output_nodes" description:"A list of nodes in the pool. Each node exports the following attributes:"`
-	Taint             TaintOutputs `json:"output_taint" description:"A block representing a taint applied to all nodes in the pool. Each taint exports the following attributes (taints must be unique by key and effect pair):"`
-}
-
-type NodesOutput struct {
-	Id         string `json:"output_id" description:"A unique ID that can be used to identify and reference the node."`
-	Name       string `json:"output_name" description:"The auto-generated name for the node."`
-	Status     string `json:"output_status" description:"A string indicating the current status of the individual node."`
-	Droplet_id string `json:"output_droplet_id" description:"The id of the node's droplet"`
-	Created_at string `json:"output_created_at" description:"The date and time when the node was created."`
-	Updated_at string `json:"output_updated_at" description:"The date and time when the node was last updated."`
-}
-
-type TaintOutputs struct {
-	Key    string `json:"output_key" description:"An arbitrary string. The \"key\" and \"value\" fields of the \"taint\" object form a key-value pair."`
-	Value  string `json:"output_value" description:"An arbitrary string. The \"key\" and \"value\" fields of the \"taint\" object form a key-value pair."`
-	Effect string `json:"output_effect" description:"How the node reacts to pods that it won't tolerate. Available effect values are: \"NoSchedule\", \"PreferNoSchedule\", \"NoExecute\"."`
-}
-
-type MaintenancePolicyOutput struct {
-	Day        string `json:"output_day" description:"The day of the maintenance window policy. May be one of \"monday\" through \"sunday\", or \"any\" to indicate an arbitrary week day."`
-	Duration   string `json:"output_duration" description:"A string denoting the duration of the service window, e.g., \"04:00\"."`
-	Start_time string `json:"output_start_time" description:"The hour in UTC when maintenance updates will be applied, in 24 hour format (e.g. “16:00”)."`
+	Id                string `json:"output_id" description:"A unique ID that can be used to identify and reference a Kubernetes cluster."`
+	Cluster_subnet    string `json:"output_cluster_subnet" description:"The range of IP addresses in the overlay network of the Kubernetes cluster."`
+	Service_subnet    string `json:"output_service_subnet" description:"The range of assignable IP addresses for services running in the Kubernetes cluster."`
+	Ipv4_address      string `json:"output_ipv4_address" description:"The public IPv4 address of the Kubernetes master node. This will not be set if high availability is configured on the cluster (v1.21+)"`
+	Endpoint          string `json:"output_endpoint" description:"The base URL of the API server on the Kubernetes master node."`
+	Status            string `json:"output_status" description:"A string indicating the current status of the cluster. Potential values include running, provisioning, and errored."`
+	Vpcuuid           string `json:"output_vpc_uuid" description:"The ID of the VPC where the Kubernetes cluster is located."`
+	CreatedAt         string `json:"output_created_at" description:"The date and time when the Kubernetes cluster was created."`
+	UpdatedAt         string `json:"output_updated_at" description:"The date and time when the Kubernetes cluster was last updated."`
+	AutoUpgrade       bool   `json:"output_auto_upgrade" description:"A boolean value indicating whether the cluster will be automatically upgraded to new patch releases during its maintenance window."`
+	KubeConfig        string `json:"output_kube_config.0" description:"A representation of the Kubernetes cluster's kubeconfig with the following attributes:"`
+	NodePool          string `json:"output_node_pool" description:"In addition to the arguments provided, these additional attributes about the cluster's default node pool are exported:"`
+	Urn               string `json:"output_urn" description:"The uniform resource name (URN) for the Kubernetes cluster."`
+	MaintenancePolicy string `json:"output_maintenance_policy" description:"A block representing the cluster's maintenance window. Updates will be applied within this window. If not specified, a default maintenance window will be chosen."`
 }
