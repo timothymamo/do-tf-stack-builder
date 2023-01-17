@@ -26,6 +26,7 @@ func CreateBaseFiles(w http.ResponseWriter, base Base, p tfutils.Project, rootEn
 
 				tfutils.TFVarModule(p.Size, base.Vpc[i], moduleBlockBody)
 			}
+			tfutils.TFOutpus(layer, "digitalocean_cluster", *base.Vpc[i].Name, base.Vpc[i])
 			tfutils.EndModuleFile(tfMod, tfModFile, p.Size, layer, *base.Vpc[i].Name)
 		}
 	}

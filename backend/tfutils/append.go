@@ -5,6 +5,7 @@ import (
 	"reflect"
 
 	"github.com/hashicorp/hcl/v2"
+	"github.com/hashicorp/hcl/v2/hclsyntax"
 	"github.com/hashicorp/hcl/v2/hclwrite"
 	"github.com/zclconf/go-cty/cty"
 	"github.com/zclconf/go-cty/cty/gocty"
@@ -70,5 +71,20 @@ func AppendAttrTravIfNotNil(body *hclwrite.Body, attr, vstr string, typ interfac
 			field := reflect.TypeOf(typ).Elem().Field(j).Tag
 			AppendAttrTravIfNotNil(varBody, string(field.Get("json")), typName+"_"+string(field.Get("json")), values.Elem().Field(j).Interface())
 		}
+	}
+}
+
+func CreateOutput(resource, rname string, rootEnvBody *hclwrite.Body, typ interface{}) {
+	values := reflect.ValueOf(typ)
+	for i := 0; i < values.NumField(); i++ {
+		field := reflect.TypeOf(typ).Field(i).Tag
+		outputBlock := rootEnvBody.AppendNewBlock("output", []string{string(field.Get("json"))})
+		outputBlockBody := outputBlock.Body()
+		outputVal := hclwrite.Tokens{
+			{Type: hclsyntax.TokenIdent, Bytes: []byte(resource + "." + rname + "." + string(field.Get("json")))},
+		}
+		outputBlockBody.SetAttributeRaw("value", outputVal)
+
+		rootEnvBody.AppendNewline()
 	}
 }

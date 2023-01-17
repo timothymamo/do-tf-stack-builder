@@ -27,10 +27,10 @@ func CreateFile(dirname, filename string) (*os.File, error) {
 
 }
 
-func ProviderFile(layer, filename string) {
+func ProviderFile(layer, resource string) {
 
 	tfProvider := hclwrite.NewEmptyFile()
-	tfProviderFile, _ := CreateFile("do-terraform/tf-modules/layer-"+layer+"/"+filename+"/", "provider")
+	tfProviderFile, _ := CreateFile("do-terraform/tf-modules/layer-"+layer+"/"+resource+"/", "provider")
 	rootBody := tfProvider.Body()
 	tfBlock := rootBody.AppendNewBlock("terraform", nil)
 	tfBlockBody := tfBlock.Body()
@@ -71,12 +71,12 @@ func InitModuleFile(layer, filename string) (*hclwrite.Body, *hclwrite.File, *os
 	return rootBody, tfBlock, tfBlockFile
 }
 
-func EndModuleFile(tfMod *hclwrite.File, tfFile *os.File, size, layer, filename string) {
+func EndModuleFile(tfMod *hclwrite.File, tfFile *os.File, size, layer, resource string) {
 
 	formattedContent := hclwrite.Format(tfMod.Bytes())
 	tfFile.Write(formattedContent)
 	if size == "medium" {
-		ProviderFile(layer, filename)
+		ProviderFile(layer, resource)
 	}
 }
 

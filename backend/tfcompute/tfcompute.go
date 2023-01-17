@@ -27,6 +27,7 @@ func CreateComputeFiles(w http.ResponseWriter, compute Compute, p tfutils.Projec
 
 				tfutils.TFVarModule(p.Size, compute.Droplets[i], moduleBlockBody)
 			}
+			tfutils.TFOutpus(layer, "digitalocean_droplet", *compute.Droplets[i].Name, compute.Droplets[i])
 			tfutils.EndModuleFile(tfMod, tfModFile, p.Size, layer, *compute.Droplets[i].Name)
 		}
 	}
@@ -40,6 +41,7 @@ func CreateComputeFiles(w http.ResponseWriter, compute Compute, p tfutils.Projec
 
 				tfutils.TFVarModule(p.Size, compute.K8s[i], moduleBlockBody)
 			}
+			tfutils.TFOutpus(layer, "digitalocean_cluster", *compute.K8s[i].Name, compute.K8s[i])
 			tfutils.EndModuleFile(tfK8s, tfK8sFile, p.Size, layer, *compute.K8s[i].Name)
 		}
 	}

@@ -48,8 +48,8 @@ type sticky_sessions struct {
 }
 
 type LBOutputs struct {
-	Id              string `json:"output_id" description:"The ID of the Load Balancer"`
-	Ip              string `json:"output_ip" description:"The ip of the Load Balancer"`
-	Urn             string `json:"output_urn" description:"The uniform resource name for the Load Balancer"`
-	CertificateName string `json:"output_certificate_name" description:"The unique name of the TLS certificate that is used for SSL termination."`
+	Id              *string `json:"id" description:"The ID of the Load Balancer"`
+	Ip              *string `json:"ip" description:"The ip of the Load Balancer"`
+	Urn             *string `json:"urn" description:"The uniform resource name for the Load Balancer"`
+	CertificateName *string `json:"certificate_name" description:"The unique name of the TLS certificate that is used for SSL termination."`
 }

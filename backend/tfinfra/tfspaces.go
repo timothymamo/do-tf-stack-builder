@@ -45,9 +45,9 @@ type versioning struct {
 }
 
 type SpacesOutputs struct {
-	Name               string `json:"output_name" description:"The name of the bucket"`
-	Urn                string `json:"output_urn" description:"The uniform resource name for the bucket"`
-	Region             string `json:"output_region" description:"The name of the region"`
-	Bucket_domain_name string `json:"output_bucket_domain_name" description:"The FQDN of the bucket (e.g. bucket-name.nyc3.digitaloceanspaces.com)"`
-	Endpoint           string `json:"output_endpoint" description:"The FQDN of the bucket without the bucket name (e.g. nyc3.digitaloceanspaces.com)"`
+	Name               *string `json:"name" description:"The name of the bucket"`
+	Urn                *string `json:"urn" description:"The uniform resource name for the bucket"`
+	Region             *string `json:"region" description:"The name of the region"`
+	Bucket_domain_name *string `json:"bucket_domain_name" description:"The FQDN of the bucket (e.g. bucket-name.nyc3.digitaloceanspaces.com)"`
+	Endpoint           *string `json:"endpoint" description:"The FQDN of the bucket without the bucket name (e.g. nyc3.digitaloceanspaces.com)"`
 }

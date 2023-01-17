@@ -32,18 +32,18 @@ type maintenance_policy struct {
 }
 
 type K8sOutputs struct {
-	Id                string `json:"output_id" description:"A unique ID that can be used to identify and reference a Kubernetes cluster."`
-	Cluster_subnet    string `json:"output_cluster_subnet" description:"The range of IP addresses in the overlay network of the Kubernetes cluster."`
-	Service_subnet    string `json:"output_service_subnet" description:"The range of assignable IP addresses for services running in the Kubernetes cluster."`
-	Ipv4_address      string `json:"output_ipv4_address" description:"The public IPv4 address of the Kubernetes master node. This will not be set if high availability is configured on the cluster (v1.21+)"`
-	Endpoint          string `json:"output_endpoint" description:"The base URL of the API server on the Kubernetes master node."`
-	Status            string `json:"output_status" description:"A string indicating the current status of the cluster. Potential values include running, provisioning, and errored."`
-	Vpcuuid           string `json:"output_vpc_uuid" description:"The ID of the VPC where the Kubernetes cluster is located."`
-	CreatedAt         string `json:"output_created_at" description:"The date and time when the Kubernetes cluster was created."`
-	UpdatedAt         string `json:"output_updated_at" description:"The date and time when the Kubernetes cluster was last updated."`
-	AutoUpgrade       bool   `json:"output_auto_upgrade" description:"A boolean value indicating whether the cluster will be automatically upgraded to new patch releases during its maintenance window."`
-	KubeConfig        string `json:"output_kube_config.0" description:"A representation of the Kubernetes cluster's kubeconfig with the following attributes:"`
-	NodePool          string `json:"output_node_pool" description:"In addition to the arguments provided, these additional attributes about the cluster's default node pool are exported:"`
-	Urn               string `json:"output_urn" description:"The uniform resource name (URN) for the Kubernetes cluster."`
-	MaintenancePolicy string `json:"output_maintenance_policy" description:"A block representing the cluster's maintenance window. Updates will be applied within this window. If not specified, a default maintenance window will be chosen."`
+	Id                *string `json:"id" description:"A unique ID that can be used to identify and reference a Kubernetes cluster."`
+	Cluster_subnet    *string `json:"cluster_subnet" description:"The range of IP addresses in the overlay network of the Kubernetes cluster."`
+	Service_subnet    *string `json:"service_subnet" description:"The range of assignable IP addresses for services running in the Kubernetes cluster."`
+	Ipv4_address      *string `json:"ipv4_address" description:"The public IPv4 address of the Kubernetes master node. This will not be set if high availability is configured on the cluster (v1.21+)"`
+	Endpoint          *string `json:"endpoint" description:"The base URL of the API server on the Kubernetes master node."`
+	Status            *string `json:"status" description:"A string indicating the current status of the cluster. Potential values include running, provisioning, and errored."`
+	Vpcuuid           *string `json:"vpc_uuid" description:"The ID of the VPC where the Kubernetes cluster is located."`
+	CreatedAt         *string `json:"created_at" description:"The date and time when the Kubernetes cluster was created."`
+	UpdatedAt         *string `json:"updated_at" description:"The date and time when the Kubernetes cluster was last updated."`
+	AutoUpgrade       *bool   `json:"auto_upgrade" description:"A boolean value indicating whether the cluster will be automatically upgraded to new patch releases during its maintenance window."`
+	KubeConfig        *string `json:"kube_config.0" description:"A representation of the Kubernetes cluster's kubeconfig with the following attributes:"`
+	NodePool          *string `json:"node_pool" description:"In addition to the arguments provided, these additional attributes about the cluster's default node pool are exported:"`
+	Urn               *string `json:"urn" description:"The uniform resource name (URN) for the Kubernetes cluster."`
+	MaintenancePolicy *string `json:"maintenance_policy" description:"A block representing the cluster's maintenance window. Updates will be applied within this window. If not specified, a default maintenance window will be chosen."`
 }

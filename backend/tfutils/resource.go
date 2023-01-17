@@ -89,3 +89,21 @@ func TFVarModule(s string, typ interface{}, moduleBlockBody *hclwrite.Body) {
 		}
 	}
 }
+
+func TFOutpus(layer, resource, rname string, typ interface{}) {
+	tfOutput := hclwrite.NewEmptyFile()
+	tfOutputFile, _ := CreateFile("do-terraform/tf-modules/layer-"+layer+"/"+rname+"/", "outputs")
+	outputtBody := tfOutput.Body()
+
+	values := reflect.ValueOf(typ)
+	for i := 1; i < values.NumField(); i++ {
+		if strings.Contains((reflect.TypeOf(typ).Field(i).Name), "Outputs") {
+			CreateOutput(resource, strings.Replace(rname, "-", "_", -1), outputtBody, values.Field(i).Interface())
+		}
+	}
+
+	outputtBody.AppendNewline()
+
+	formattedContent := hclwrite.Format(tfOutput.Bytes())
+	tfOutputFile.Write(formattedContent)
+}

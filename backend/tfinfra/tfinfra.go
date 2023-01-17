@@ -28,6 +28,7 @@ func CreateInfraFiles(w http.ResponseWriter, infra Infra, p tfutils.Project, roo
 
 				tfutils.TFVarModule(p.Size, infra.Database[i], moduleBlockBody)
 			}
+			tfutils.TFOutpus(layer, "digitalocean_cluster", *infra.Database[i].Name, infra.Database[i])
 			tfutils.EndModuleFile(tfMod, tfModFile, p.Size, layer, *infra.Database[i].Name)
 		}
 	}
@@ -41,6 +42,7 @@ func CreateInfraFiles(w http.ResponseWriter, infra Infra, p tfutils.Project, roo
 
 				tfutils.TFVarModule(p.Size, infra.LoadBalancer[i], moduleBlockBody)
 			}
+			tfutils.TFOutpus(layer, "digitalocean_cluster", *infra.LoadBalancer[i].Name, infra.LoadBalancer[i])
 			tfutils.EndModuleFile(tfMod, tfModFile, p.Size, layer, *infra.LoadBalancer[i].Name)
 		}
 	}
@@ -54,6 +56,7 @@ func CreateInfraFiles(w http.ResponseWriter, infra Infra, p tfutils.Project, roo
 
 				tfutils.TFVarModule(p.Size, infra.Spaces[i], moduleBlockBody)
 			}
+			tfutils.TFOutpus(layer, "digitalocean_cluster", *infra.LoadBalancer[i].Name, infra.LoadBalancer[i])
 			tfutils.EndModuleFile(tfMod, tfModFile, p.Size, layer, *infra.Spaces[i].Name)
 		}
 	}

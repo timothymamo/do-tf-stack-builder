@@ -29,14 +29,14 @@ type timeouts struct {
 }
 
 type DBOutputs struct {
-	Id           string `json:"output_id" description:"The ID of the database cluster."`
-	Urn          string `json:"output_urn" description:"The uniform resource name of the database cluster."`
-	Host         string `json:"output_host" description:"Database cluster's hostname."`
-	Private_host string `json:"output_private_host" description:"Same as host, but only accessible from resources within the account and in the same region."`
-	Port         int    `json:"output_port" description:"Network port that the database cluster is listening on."`
-	Uri          string `json:"output_uri" description:"The full URI for connecting to the database cluster."`
-	Private_uri  string `json:"output_private_uri" description:"Same as uri, but only accessible from resources within the account and in the same region."`
-	Database     string `json:"output_database" description:"Name of the cluster's default database."`
-	User         string `json:"output_user" description:"Username for the cluster's default user."`
-	Password     string `json:"output_password" description:"Password for the cluster's default user."`
+	Id           *string `json:"id" description:"The ID of the database cluster."`
+	Urn          *string `json:"urn" description:"The uniform resource name of the database cluster."`
+	Host         *string `json:"host" description:"Database cluster's hostname."`
+	Private_host *string `json:"private_host" description:"Same as host, but only accessible from resources within the account and in the same region."`
+	Port         *int    `json:"port" description:"Network port that the database cluster is listening on."`
+	Uri          *string `json:"uri" description:"The full URI for connecting to the database cluster."`
+	Private_uri  *string `json:"private_uri" description:"Same as uri, but only accessible from resources within the account and in the same region."`
+	Database     *string `json:"database" description:"Name of the cluster's default database."`
+	User         *string `json:"user" description:"Username for the cluster's default user."`
+	Password     *string `json:"password" description:"Password for the cluster's default user."`
 }

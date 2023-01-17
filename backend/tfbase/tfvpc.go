@@ -10,9 +10,9 @@ type VPC struct {
 }
 
 type VPCOutputs struct {
-	Iprange    string `json:"output_ip_range" description:"The range of IP addresses for the VPC in CIDR notation."`
-	Id         string `json:"output_id" description:"The unique identifier for the VPC."`
-	Urn        string `json:"output_urn" description:"The uniform resource name (URN) for the VPC."`
-	Default    bool   `json:"output_default" description:"A boolean indicating whether or not the VPC is the default one for the region."`
-	Created_at string `json:"output_created_at" description:"The date and time of when the VPC was created."`
+	Iprange    *string `json:"ip_range" description:"The range of IP addresses for the VPC in CIDR notation."`
+	Id         *string `json:"id" description:"The unique identifier for the VPC."`
+	Urn        *string `json:"urn" description:"The uniform resource name (URN) for the VPC."`
+	Default    *bool   `json:"default" description:"A boolean indicating whether or not the VPC is the default one for the region."`
+	Created_at *string `json:"created_at" description:"The date and time of when the VPC was created."`
 }
