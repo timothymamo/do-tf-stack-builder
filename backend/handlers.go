@@ -72,11 +72,12 @@ func (app *App) CreateTFFiles(w http.ResponseWriter, r *http.Request) {
 
 		listFiles("do-terraform")
 
-		tfoutput, err := ioutil.ReadFile("do-terraform.tf")
-		if err != nil {
-			fmt.Printf("Could not read the file due to this %s error \n", err)
-		}
-		utils.RespondWithJSON(w, http.StatusOK, string(tfoutput))
+		// tfoutput, err := ioutil.ReadFile("do-terraform.tf")
+		// if err != nil {
+		// 	fmt.Printf("Could not read the file due to this %s error \n", err)
+		// }
+		// utils.RespondWithJSON(w, http.StatusOK, string(tfoutput))
+		sendTFFile(w, r)
 
 		if err := os.RemoveAll("do-terraform.tf"); err != nil {
 			utils.RespondWithError(w, http.StatusInternalServerError, err.Error())
@@ -122,6 +123,24 @@ func listFiles(path string) {
 			}
 		}
 	}
+}
+
+func sendTFFile(w http.ResponseWriter, r *http.Request) {
+
+	downloadBytes, err := ioutil.ReadFile("do-terraform.tf")
+	if err != nil {
+		fmt.Println(err)
+	}
+	fileSize := len(string(downloadBytes))
+
+	w.Header().Set("Content-Type", "text/plain")
+	w.Header().Set("Content-Disposition", "attachment; filename=do-terraform.tf")
+	w.Header().Set("Expires", "0")
+	w.Header().Set("Content-Transfer-Encoding", "binary")
+	w.Header().Set("Content-Length", strconv.Itoa(fileSize))
+	w.Header().Set("Content-Control", "private, no-transform, no-store, must-revalidate")
+
+	http.ServeContent(w, r, "do-terraform.tf", time.Now(), bytes.NewReader(downloadBytes))
 }
 
 func sendZipFile(w http.ResponseWriter, r *http.Request) {
