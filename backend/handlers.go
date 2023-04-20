@@ -78,23 +78,23 @@ func (app *App) CreateTFFiles(w http.ResponseWriter, r *http.Request) {
 		}
 		utils.RespondWithJSON(w, http.StatusOK, string(tfoutput))
 
-		// if err := os.RemoveAll("do-terraform.tf"); err != nil {
-		// 	utils.RespondWithError(w, http.StatusInternalServerError, err.Error())
-		// 	return
-		// }
+		if err := os.RemoveAll("do-terraform.tf"); err != nil {
+			utils.RespondWithError(w, http.StatusInternalServerError, err.Error())
+			return
+		}
 	} else if m.Project.Size == "medium" {
-		// zipWriter()
-		// sendZipFile(w, r)
-		// if err := os.RemoveAll("do-terraform.zip"); err != nil {
-		// 	utils.RespondWithError(w, http.StatusInternalServerError, err.Error())
-		// 	return
-		// }
+		zipWriter()
+		sendZipFile(w, r)
+		if err := os.RemoveAll("do-terraform.zip"); err != nil {
+			utils.RespondWithError(w, http.StatusInternalServerError, err.Error())
+			return
+		}
 	}
 
-	// if err := os.RemoveAll("do-terraform"); err != nil {
-	// 	utils.RespondWithError(w, http.StatusInternalServerError, err.Error())
-	// 	return
-	// }
+	if err := os.RemoveAll("do-terraform"); err != nil {
+		utils.RespondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
 
 }
 
